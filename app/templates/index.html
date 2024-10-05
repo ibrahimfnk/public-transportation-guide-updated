@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home Page</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='/css/home_styles.css')}}">
+</head>
+<body>
+    <div class="banner">
+        <header class="navbar">
+            <nav>
+                <ul>
+                    <li><a href="{{url_for('index')}}" class="active" id="home">Home</a></li>
+                    <li><a href="#" id="about">About</a></li>
+                    <li><a href="{{ url_for('about') }}" id="contact">Contact</a></li>
+                    <li class="right">
+                        <li><a href="{{url_for('login')}}" id="sign-in">Sign In</a></li>
+                        <li><a href="{{url_for('register')}}" id="sign-up">Sign Up</a></li>
+                    </li>
+                </ul>
+            </nav>
+        </header>
+
+        <div class="content">
+            <h2>Public Transportation Guide</h2>
+
+            <div>
+                <button type="button"><span></span>Click Me</button>
+            </div>
+        </div>
+    </div>
+    
+</body>
+</html>
