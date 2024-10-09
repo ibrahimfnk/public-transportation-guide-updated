@@ -12,30 +12,34 @@
     background-position: center;
 }
 
-.navbar {
+.navbr {
     width: 100%;
     margin: auto;
-    padding: 35px 0;
+    padding: 20px 0;
     display: flex;
     align-items: center;
     justify-content: space-between;
     background-color: black;
 }
 
-.navbar ul li {
+.navbr ul li {
     list-style: none;
     display: inline-block;
     margin: 0 20px;
     position: relative;
 }
 
-.navbar ul li a {
+.navbr ul li.right {
+    margin-left: 980px; /* Push the right links to the end */
+}
+.navbr ul li a {
     text-decoration: none;
     color: aliceblue;
     text-transform: uppercase;
+  
 }
 
-.navbar ul li::after {
+.navbr ul li::after {
     content: '';
     height: 3px;
     width: 0%;
@@ -46,8 +50,23 @@
     transition: 0.5s;
 }
 
-.navbar ul li:hover::after {
+
+
+
+.navbr ul li:hover::after {
     width: 100%;
+    
+  
+}
+.navbr ul li a.active{
+   text-decoration: underline;
+   text-decoration-color: #009688;
+   text-decoration-thickness: 3px;
+   text-underline-offset: 10px;
+   
+   
+    
+    
 }
 
 .content {
@@ -61,7 +80,7 @@
 
 .content h2 {
     font-size: 70px;
-    margin-top: 80px;
+    margin-top: 40px;
 }
 
 button {
@@ -79,6 +98,20 @@ button {
     overflow: hidden;
 }
 
+.ap{
+    width: 200px;
+    padding: 15px 0;
+    text-align: center;
+    margin: 20px 10px;
+    border-radius: 25px;
+    font-weight: bold;
+    border: 2px solid white;
+    background: transparent;
+    color: white;
+    cursor: pointer;
+    position: relative;
+    overflow: hidden;
+}
 span {
     background: white;
     height: 100%;

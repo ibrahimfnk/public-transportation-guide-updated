@@ -3,20 +3,129 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Home Page</title>
+    <title>Chatbot</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="{{url_for('static', filename='/css/home_styles.css')}}">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* Chat container styles */
+        .chat-container {
+            position: fixed;
+            bottom: 80px; /* Space above the button */
+            right: 20px; /* Spacing from the right */
+            width: 300px; /* Fixed width for the chat */
+            background: white; /* White background for the chat */
+            border-radius: 5px; /* Rounded corners */
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Shadow for depth */
+            display: none; /* Hide the chat container by default */
+            z-index: 1000; /* Ensure chat is on top */
+            overflow: hidden;
+        }
+
+        /* Chat messages area */
+        .messages {
+            height: 400px; /* Fixed height for the messages area */
+            overflow-y: auto; /* Scroll when overflow */
+            padding: 10px;
+        }
+
+        /* Message bubble styles */
+        .message {
+            padding: 10px;
+            border-radius: 15px;
+            margin: 5px 0;
+            max-width: 70%;
+        }
+        
+        .user-message {
+            background-color: #4CAF50; /* Green for user messages */
+            color: white;
+            align-self: flex-end; /* Align user messages to the right */
+        }
+        
+        .bot-message {
+            background-color: #e0e0e0; /* Gray for bot messages */
+            align-self: flex-start; /* Align bot messages to the left */
+        }
+
+        /* Input area styles */
+        .input-area {
+            display: flex; /* Use flexbox for input and button */
+            border-top: 1px solid #e0e0e0; /* Top border for the input area */
+        }
+
+        /* Input field styles */
+        .input-field {
+            flex: 1; /* Take all available space */
+            padding: 10px; /* Padding for the input field */
+            border: none; /* Remove border */
+            outline: none; /* Remove outline */
+            border-radius: 0 0 0 5px; /* Rounded corners */
+        }
+
+        /* Send button styles */
+        .send-btn {
+            background-color: #4CAF50; /* Green background */
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 0 5px 0; /* Rounded corners */
+        }
+
+        /* Close button styles */
+        .close-btn {
+            background-color: #ff4757; /* Red background for close */
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-right: 5px; /* Spacing between buttons */
+        }
+
+        /* Clear conversation button styles */
+        .clear-btn {
+            background-color: #ffa502; /* Orange background for clear */
+            color: white;
+            padding: 5px 10px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        /* Style for the button to show the chat */
+        .show-btn {
+            background-image: url('https://img.freepik.com/free-vector/graident-ai-robot-vectorart_78370-4114.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1728172800&semt=ais_hybrid');
+            background-size: cover; /* Cover the entire button */
+            width: 60px; /* Set width for the button */
+            height: 60px; /* Set height for the button */
+            border: none; /* Remove border */
+            cursor: pointer; /* Pointer on hover */
+            position: fixed; /* Fix position to bottom right */
+            bottom: 20px; /* Spacing from the bottom */
+            right: 20px; /* Spacing from the right */
+            z-index: 1000; /* Ensure button is on top */
+        }
+    </style>
 </head>
 <body>
     <div class="banner">
-        <header class="navbar">
+        <header class="navbr">
             <nav>
                 <ul>
                     <li><a href="{{url_for('index')}}" class="active" id="home">Home</a></li>
                     <li><a href="#" id="about">About</a></li>
                     <li><a href="{{ url_for('about') }}" id="contact">Contact</a></li>
                     <li class="right">
-                        <li><a href="{{url_for('login')}}" id="sign-in">Sign In</a></li>
-                        <li><a href="{{url_for('register')}}" id="sign-up">Sign Up</a></li>
+                        <li ><a href="{{url_for('login')}}" id="sign-in">Sign In</a></li>
+                        <li ><a href="{{url_for('register')}}" id="sign-up">Sign Up</a></li>
                     </li>
                 </ul>
             </nav>
@@ -24,12 +133,91 @@
 
         <div class="content">
             <h2>Public Transportation Guide</h2>
-
             <div>
-                <button type="button"><span></span>Click Me</button>
+                <button type="button" class="ap"><span></span>Click Me</button>
             </div>
         </div>
     </div>
-    
+
+    <!-- Chat container -->
+    <div class="chat-container" id="chatContainer">
+        <div class="messages" id="messages">
+            {% if response %}
+            <div class="message bot-message">
+                <p>{{ response }}</p>
+            </div>
+            {% endif %}
+        </div>
+        <div class="input-area">
+            <input type="text" id="queryInput" class="input-field" placeholder="Type your message..." required>
+            <button type="submit" class="send-btn" id="sendBtn">Send</button>
+        </div>
+        <div class="flex justify-end p-2">
+            <button class="close-btn" id="closeChatBtn">Close</button>
+            <button class="clear-btn" id="clearMessagesBtn">Clear Conversation</button>
+        </div>
+    </div>
+
+    <!-- Fixed button to show the chat -->
+    <button type="button" class="show-btn rounded-full" id="showChatBtn"></button>
+
+    <script>
+        // JavaScript to show the chat when the button is clicked
+        const showChatBtn = document.getElementById('showChatBtn');
+        const chatContainer = document.getElementById('chatContainer');
+        const messages = document.getElementById('messages');
+        const queryInput = document.getElementById('queryInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const closeChatBtn = document.getElementById('closeChatBtn');
+        const clearMessagesBtn = document.getElementById('clearMessagesBtn');
+
+        // Show or hide the chat when the button is clicked
+        showChatBtn.addEventListener('click', function() {
+            chatContainer.style.display = chatContainer.style.display === 'none' || chatContainer.style.display === '' ? 'block' : 'none';
+        });
+
+        // Handle message sending
+        sendBtn.addEventListener('click', function() {
+            const query = queryInput.value;
+            if (query) {
+                // Display user message
+                const userMessage = document.createElement('div');
+                userMessage.className = 'message user-message';
+                userMessage.innerHTML = `<p>${query}</p>`;
+                messages.appendChild(userMessage);
+                messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
+
+                // Send message to server
+                fetch('/ask', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/x-www-form-urlencoded'
+                    },
+                    body: `query=${encodeURIComponent(query)}` // Send the query
+                })
+                .then(response => response.json()) // Expecting JSON response
+                .then(data => {
+                    // Display bot response
+                    const botMessage = document.createElement('div');
+                    botMessage.className = 'message bot-message';
+                    botMessage.innerHTML = `<p>${data.response}</p>`;
+                    messages.appendChild(botMessage);
+                    messages.scrollTop = messages.scrollHeight; // Scroll to the bottom
+                    queryInput.value = ''; // Clear input field
+                })
+                .catch(error => console.error('Error:', error));
+            }
+        });
+
+        // Close the chat container
+        closeChatBtn.addEventListener('click', function() {
+            chatContainer.style.display = 'none';
+        });
+
+        // Clear the conversation messages
+        clearMessagesBtn.addEventListener('click', function() {
+            messages.innerHTML = ''; // Clear all messages
+        });
+    </script>
 </body>
 </html>

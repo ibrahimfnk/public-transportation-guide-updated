@@ -6,7 +6,12 @@ from wtforms.validators import DataRequired, Email
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import func
 from flask_migrate import Migrate
+import re
 from datetime import datetime
+from sqlalchemy.exc import IntegrityError
+
+
+
 
 
 
@@ -69,37 +74,54 @@ class LoginForm(FlaskForm):
     submit = SubmitField("Submit")
 
 
+faqs = {
+    "What are the operating hours?": "Our services operate from 5 AM to 11 PM daily.",
+    "How do I contact customer service?": "You can reach customer service at 123-456-7890.",
+    "Is there a student discount?": "Yes, students can get a 20% discount on tickets.",
+    "Where can I buy tickets?": "Tickets can be purchased online or at any ticket booth.",
+    "Are there any routes to downtown?": "Yes, several routes go to downtown. Please check our website for details."
+}
+keyword_responses = {
+    "refund": "You can request a refund within 30 days of purchase. Please contact customer service for assistance.",
+    "lost": "If you lost an item, please visit our Lost and Found section at the main office.",
+    "feedback": "We appreciate your feedback! You can send your comments to feedback@ourcompany.com.",
+    "delay": "We apologize for any delays. Please check our website for real-time updates on schedules."
+}
 
+def bot_response(query):
+    """Provides a response to the user's query."""
+
+    # Convert query to lowercase for case-insensitive matching
+    query = query.lower()
+     
+       # Check if the query contains any keywords
+    for keyword in keyword_responses.keys():
+        if re.search(r'\b' + re.escape(keyword) + r's?\b', query):  # Match keyword or its plural
+            return keyword_responses[keyword]
+
+
+
+    # Check if the query matches any FAQ
+    for question, answer in faqs.items():
+        if question.lower() in query:
+            return answer
+
+    # If no match found, provide a generic response
+    return "I couldn't find an answer to that. Please try asking a different question."
 
 @app.route("/")
 @app.route("/home")
 def index():
+     # Call the function from bot.py to get the message
     if 'username' in session:
         return render_template('index.html', username=session['username'])
     else:
         return render_template('index.html')
-    
-@app.route("/register", methods=['GET', 'POST'])
-def register():
-    form  = RegisterForm()
-    if form.validate_on_submit():
-        username = form.username.data
-        email = form.email.data
-        password = form.password.data
-
-        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-
-        "from models import User"
-        
-        # Store into database
-
-        form_data = User(username=username, email=email, password=hashed_password)
-        db.session.add(form_data)
-        db.session.commit()
-
-        return redirect(url_for('login'))
-
-    return render_template('register.html', form=form)
+@app.route('/ask', methods=['POST'])
+def ask():
+    query = request.form['query']
+    response = bot_response(query)  # Process the query and get response
+    return jsonify(response=response)
 
 @app.route("/login", methods=['GET', 'POST'])
 def login():
@@ -119,6 +141,42 @@ def login():
 
         
     return render_template('login.html', form=form)
+    
+
+    
+   
+
+
+@app.route("/register", methods=['GET', 'POST'])
+def register():
+    form = RegisterForm()
+    if form.validate_on_submit():
+        username = form.username.data
+        email = form.email.data
+        password = form.password.data
+
+        # Check if the email already exists
+        existing_user = User.query.filter_by(email=email).first()
+        if existing_user:
+            flash("Email already exists. Please use a different email.", "danger")
+            return redirect(url_for('register'))
+
+        hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+
+        # Store into database
+        form_data = User(username=username, email=email, password=hashed_password)
+        db.session.add(form_data)
+
+        try:
+            db.session.commit()
+            return redirect(url_for('login'))
+        except IntegrityError:
+            db.session.rollback()  # Rollback to avoid further errors
+            flash("There was an issue registering. Please try again.", "danger")
+            return redirect(url_for('register'))
+
+    return render_template('register.html', form=form)
+
 
 @app.route('/logout')
 def logout():
