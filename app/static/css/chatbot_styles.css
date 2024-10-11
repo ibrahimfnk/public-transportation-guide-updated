@@ -1,48 +1,106 @@
-/* chatbot_styles.css */
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f4f4f4;
+    margin: 0;
+    padding: 0;
+}
+
+/* Chat container styles */
 .chat-container {
-    position: fixed; /* Fixed positioning to keep it on the right */
-    top: 0; /* Align to the top */
-    right: 0; /* Align to the right */
-    width: 350px; /* Set a fixed width for the chatbot */
-    height: 100vh; /* Full height of the viewport */
-    border-left: 1px solid #ccc; /* Add a border on the left side */
-    background-color: #f9f9f9;
-    display: flex;
-    flex-direction: column;
-    z-index: 1000; /* Ensure it appears above other elements */
+    position: fixed;
+    bottom: 80px; /* Space above the button */
+    right: 20px; /* Spacing from the right */
+    width: 300px; /* Fixed width for the chat */
+    background: white; /* White background for the chat */
+    border-radius: 5px; /* Rounded corners */
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1); /* Shadow for depth */
+    display: none; /* Hide the chat container by default */
+    z-index: 1000; /* Ensure chat is on top */
+    overflow: hidden;
 }
 
-.chatbox {
-    display: flex;
-    flex-direction: column;
-    flex-grow: 1; /* Allow the chatbox to grow and fill the available space */
-}
-
+/* Chat messages area */
 .messages {
-    flex-grow: 1; /* Grow to fill remaining space */
-    overflow-y: auto; /* Allow scrolling */
-    border: 1px solid #ccc;
+    height: 400px; /* Fixed height for the messages area */
+    overflow-y: auto; /* Scroll when overflow */
     padding: 10px;
-    margin-bottom: 10px;
-    background-color: white;
 }
 
-#userInput {
+/* Message bubble styles */
+.message {
     padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    margin-bottom: 5px; /* Add some space between input and button */
+    border-radius: 15px;
+    margin: 5px 0;
+    max-width: 70%;
 }
 
-#sendButton {
+.user-message {
+    background-color: #4CAF50; /* Green for user messages */
+    color: white;
+    align-self: flex-end; /* Align user messages to the right */
+}
+
+.bot-message {
+    background-color: #e0e0e0; /* Gray for bot messages */
+    align-self: flex-start; /* Align bot messages to the left */
+}
+
+/* Input area styles */
+.input-area {
+    display: flex; /* Use flexbox for input and button */
+    border-top: 1px solid #e0e0e0; /* Top border for the input area */
+}
+
+/* Input field styles */
+.input-field {
+    flex: 1; /* Take all available space */
+    padding: 10px; /* Padding for the input field */
+    border: none; /* Remove border */
+    outline: none; /* Remove outline */
+    border-radius: 0 0 0 5px; /* Rounded corners */
+}
+
+/* Send button styles */
+.send-btn {
+    background-color: #4CAF50; /* Green background */
+    color: white;
     padding: 10px;
     border: none;
-    background-color: #007bff;
-    color: white;
-    border-radius: 5px;
     cursor: pointer;
+    border-radius: 0 0 5px 0; /* Rounded corners */
 }
 
-#sendButton:hover {
-    background-color: #0056b3;
+/* Close button styles */
+.close-btn {
+    background-color: #ff4757; /* Red background for close */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+    margin-right: 5px; /* Spacing between buttons */
+}
+
+/* Clear conversation button styles */
+.clear-btn {
+    background-color: #ffa502; /* Orange background for clear */
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    cursor: pointer;
+    border-radius: 5px;
+}
+
+/* Style for the button to show the chat */
+.show-btn {
+    background-image: url('https://img.freepik.com/free-vector/graident-ai-robot-vectorart_78370-4114.jpg?size=338&ext=jpg&ga=GA1.1.2008272138.1728172800&semt=ais_hybrid');
+    background-size: cover; /* Cover the entire button */
+    width: 60px; /* Set width for the button */
+    height: 60px; /* Set height for the button */
+    border: none; /* Remove border */
+    cursor: pointer; /* Pointer on hover */
+    position: fixed; /* Fix position to bottom right */
+    bottom: 20px; /* Spacing from the bottom */
+    right: 20px; /* Spacing from the right */
+    z-index: 1000; /* Ensure button is on top */
 }
