@@ -1,68 +1,78 @@
-body {
-    font-family: Arial, sans-serif;
+* {
     margin: 0;
     padding: 0;
-    background-image: url('https://media.wired.com/photos/59269cd37034dc5f91bec0f1/191:100/w_1280,c_limit/GoogleMapTA.jpg');
-    background-size: cover;
-    background-position: center;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    height: 100vh;
-    overflow: hidden;
+    font-family: sans-serif;
 }
 
-header {
-    background-color: #333;
-    color: #fff;
-    padding: 1em;
-    text-align: center;
+body {
+    overflow-y: hidden;
+}
+
+.banner {
+    width: 100%;
+    height: 100vh;
+    background-image: linear-gradient(rgba(0,0,0,0.75), rgba(0,0,0,0.75)),url(/static/img/high-speed-railway-commuter-train.png);
+    background-size: cover;
+    background-position: center;
+}
+
+.navbr {
+    width: 100%;
+    margin: auto;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black;
+}
+
+.navbr ul li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+}
+
+.navbr ul li.right {
+    margin-left: 980px; /* Push the right links to the end */
+}
+
+.navbr ul li a {
+    text-decoration: none;
+    color: aliceblue;
+    text-transform: uppercase;
+  
+}
+
+.navbr ul li::after {
+    content: '';
+    height: 3px;
+    width: 0%;
+    background: #009688;
     position: absolute;
-    top: 0;
     left: 0;
+    bottom: -7px;
+    transition: 0.5s;
+}
+
+
+
+
+.navbr ul li:hover::after {
     width: 100%;
 }
 
-nav ul {
-    list-style: none;
-    margin: 0;
-    padding: 0;
-    display: flex;
-    justify-content: space-between;
-}
-
-nav li {
-    margin-right: 10px;
-}
-
-nav a {
-    color: #fff;
-    text-decoration: none;
-}
-nav a.active{
-   background-color: #444;
-    padding: 10px 20px;
-    border-radius: 10px;
-}
-
-.right {
-    margin-left: auto;
+.navbr ul li a.active{
+   text-decoration: underline;
+   text-decoration-color: #009688;
+   text-decoration-thickness: 3px;
+   text-underline-offset: 10px;
+   
+   
+    
     
 }
 
-#sign-in, #sign-up,#home,#about,#contact:hover {
-    background-color: #333;
-    border: none;
-    color: #fff;
-    padding: 10px 20px;
-    font-size: 16px;
-    cursor: pointer;
-    border-radius: 10px;
-}
-
-#sign-in:hover, #sign-up:hover,#home:hover,#about:hover,#contact:hover {
-    background-color: #444;
-}
 
 .container {
 	display: flex;
@@ -71,6 +81,54 @@ nav a.active{
 	height: 100vh;
 	margin: 0;
 }
+
+/*Card Effect*/
+
+.card-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.card {
+    position: relative;
+    width: 200px;
+    height: 250px;
+    border-radius: 15px;
+    overflow: hidden;
+    transition: transform 0.4s ease, box-shadow 0.4s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    cursor: pointer;
+    margin-right: 2rem;
+}
+
+.card:hover {
+    transform: scale(1.1); /* Enlarge the card when hovered */
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.4); /* Increase shadow on hover */
+}
+
+.card-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.4s ease;
+}
+
+.card:hover .card-image {
+    transform: scale(1.2); /* Slightly zoom in the image on hover */
+}
+
+.card-info {
+    position: absolute;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.6);
+    width: 100%;
+    padding: 10px;
+    color: white;
+    text-align: center;
+}
+
 
 .box {
 	width: 200px;

@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chatbot</title>
+    <title>Transportation Guide</title>
     <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename = '/img/favicon-32x32.png')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='/css/home_styles.css')}}">
     <link rel="stylesheet" href="{{url_for('static', filename='/css/chatbot_styles.css')}}">
 </head>
@@ -13,7 +14,7 @@
             <header class="navbr">
                 <nav>
                     <ul>
-                        <li><a href="{{url_for('index')}}" class="active" id="home">Home</a></li>
+                        <li><a href="{{url_for('index')}}" id="home">Home</a></li>
                         <li><a href="#" id="about">About</a></li>
                         <li><a href="{{url_for('about')}}" id="contact">Contact</a></li>
                         <li class="right">
@@ -54,6 +55,8 @@
     <!-- Fixed button to show the chat -->
     <button type="button" class="show-btn rounded-full" id="showChatBtn"></button>
 
+
+    <script src="/static/js/active_header.js"></script>
     <script src="/static/js/chatbot.js"></script>
 </body>
 </html>

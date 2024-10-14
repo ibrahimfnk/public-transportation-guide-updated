@@ -3,42 +3,53 @@
 <head>
 	<title>About Us</title>
 	<link rel="stylesheet" type="text/css" href="{{url_for('static', filename='/css/style1.css')}}">
+	<link rel="icon" type="image/x-icon" href="{{url_for('static', filename = '/img/favicon-32x32.png')}}">
 </head>
 <body>
-	<header>
-        <nav>
-            <ul>
-                <li><a href="{{url_for('index')}}" id="home" >Home</a></li>
-                <li><a href="#" id="about">About</a></li>
-                <li><a href="{{url_for('about')}}" class="active" id="contact">Contact</a></li>
-                <li class="right">
-                    <a href="{{url_for('login')}}" id="sign-in">Sign In</a>
-                    <a href="{{url_for('register')}}" id="sign-up">Sign Up</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
+	<div class="banner">
+		<header class="navbr">
+			<nav>
+				<ul>
+					<li><a href="{{url_for('index')}}" id="home">Home</a></li>
+					<li><a href="#" id="about">About</a></li>
+					<li><a href="{{url_for('about')}}" id="contact">Contact</a></li>
+					<li class="right">
+						<li ><a href="{{url_for('login')}}" id="sign-in">Sign In</a></li>
+						<li ><a href="{{url_for('register')}}" id="sign-up">Sign Up</a></li>
+					</li>
+				</ul>
+			</nav>
+		</header>   
+	<div>
+
 	<div class="container">
 		<div class="left-sidebar">
-			<div class="box">
-				<img src="https://via.placeholder.com/200x250" alt="Person 1">
-				<div class="name-box">
-					<div class="name">Ibrahim</div>
+			<div class="card-container">
+				<div class="card">
+					<img src="https://via.placeholder.com/200x250" alt="Person" class="card-image">
+					<div class="card-info">
+						<h3 class="name">Ibrahim</h3>
+					</div>
+				</div>
+
+				<div class="card">
+					<img src="https://via.placeholder.com/200x250" alt="Person" class="card-image">
+					<div class="card-info">
+						<h3 class="name">Shreyash</h3>
+					</div>
+				</div>
+
+				<div class="card">
+					<img src="https://via.placeholder.com/200x250" alt="Person" class="card-image">
+					<div class="card-info">
+						<h3 class="name">Harsh</h3>
+					</div>
 				</div>
 			</div>
-			<div class="box">
-				<img src="https://via.placeholder.com/200x250" alt="Person 2">
-				<div class="name-box">
-					<div class="name">Shreyash</div>
-				</div>
-			</div>
-			<div class="box">
-				<img src="https://via.placeholder.com/200x250" alt="Person 3">
-				<div class="name-box">
-					<div class="name">Harsh</div>
-				</div>
-			</div>
+
 		</div>
 	</div>
+
+	<script src="/static/js/active_header.js"></script>
 </body>
 </html>
