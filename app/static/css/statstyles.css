@@ -94,6 +94,7 @@ html {
     border-radius: 10px;
     text-align: center;
     box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    position: relative;
 }
 
 .metric-box h2 {
@@ -111,6 +112,13 @@ html {
     grid-column: span 2; 
 }
 
+#locationList, #visitedLocationList, #favoriteLocationList {
+    list-style-type: none; 
+    color: #ffffff;
+    padding: 10px; 
+    margin: 0; 
+}
+
 #locationList {
     list-style-type: decimal; 
     color: #ffffff;
@@ -124,4 +132,29 @@ html {
     color: #00e676; 
     border-radius: 5px; 
     margin-bottom: 5px; 
+}
+
+.favorite-btn {
+    cursor: pointer;
+    color: #ff5252; /* Unchecked color */
+    position: absolute;
+    right: 20px;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.favorite-btn.checked {
+    color: #ffeb3b; /* Checked color (Yellow) */
+}
+
+.metric-box ul {
+    padding-left: 0;
+}
+
+.metric-box li {
+    padding: 10px;
+    background-color: #2C2C2C;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    position: relative;
 }

@@ -52,6 +52,11 @@
                         {{form.email.label(for='Email')}}
                         {{form.email()}}
                         <i class='bx bxl-gmail' ></i>
+                        {% if form.email.errors %}
+                        <div class="text-danger">
+                            {{ form.email.errors[0] }}
+                        </div>
+                        {% endif %}
                     </div>
                     <div class="input-box">
                         {{form.password.label(for='Password')}}
