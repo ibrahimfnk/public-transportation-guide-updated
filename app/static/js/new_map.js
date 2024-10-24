@@ -56,7 +56,7 @@ document.getElementById("saveTripBtn").addEventListener("click", function() {
     }
 
     const leg = directionsResponse.routes[0].legs[0];
-    
+
     const startLocation = {
         name: leg.start_address,
         latitude: leg.start_location.lat(),
@@ -70,13 +70,16 @@ document.getElementById("saveTripBtn").addEventListener("click", function() {
     };
 
     const distance = leg.distance.value / 1000; // Distance in kilometers
-    
+
     // Gather transport modes for each step
     const transportModes = leg.steps.map(step => step.travel_mode).join(",");
     console.log(transportModes);
 
     // Calculate carbon footprint based on the distance and transport mode
     const carbonFootprint = calculateCarbonFootprint(leg.steps);
+    
+    // Calculate carbon footprint for all steps as if they were driving
+    const carbonFootprintPrivate = calculateCarbonFootprintPrivate(leg.steps);
 
     // Send the data to the backend using fetch
     fetch('/save_trip', {
@@ -90,6 +93,7 @@ document.getElementById("saveTripBtn").addEventListener("click", function() {
             distance: distance,
             transport_mode: transportModes,
             carbon_footprint: carbonFootprint,
+            carbon_footprint_private: carbonFootprintPrivate, // Send private car carbon footprint
         }),
     })
     .then(response => response.json())
@@ -111,14 +115,18 @@ function displayRouteDetails(response) {
     // Clear previous steps
     stepsContainer.innerHTML = '';
 
-    // Create a list of steps
+    // Create a container for the journey steps
     const ul = document.createElement('ul');
+    ul.className = 'journey-steps'; // Add a class for custom styling
+
     directions.forEach((step, index) => {
         const li = document.createElement('li');
+        li.className = 'journey-step'; // Custom class for each step
+
         const duration = step.duration.text;
         let transitDetails = '';
 
-        //Debug steps in console
+        // Debug steps in console
         console.log(`Step ${index}:`, step);
 
         // Check if the step has transit details
@@ -129,22 +137,53 @@ function displayRouteDetails(response) {
             const arrivalTime = step.transit.arrival_time ? step.transit.arrival_time.text : 'N/A';
 
             transitDetails = `
-                Get on at ${departureStop} (Departure Time: ${departureTime}) <br>
-                ${arrivalStop ? ` Get off at ${arrivalStop} (Arrival Time: ${arrivalTime})` : ''}
+                <div class="transit-details">
+                    <span class="transit-stop">Departure: ${departureStop} (Time: ${departureTime})</span><br>
+                    <span class="transit-stop">Arrival: ${arrivalStop} (Time: ${arrivalTime})</span>
+                </div>
             `;
         }
 
-        li.innerHTML = `<div class="instructions">${step.instructions}</div>
-            (Duration: ${duration})
-            <br>
-            ${transitDetails}`;
-        
+        const stepInstructions = `
+            <div class="step-header">
+                <span class="step-icon">${getStepIcon(step.travel_mode)}</span>
+                <span class="step-instructions">${step.instructions}</span>
+                <span class="step-duration">(${duration})</span>
+            </div>
+            <div class="step-details">
+                ${transitDetails}
+            </div>
+        `;
+
+        li.innerHTML = stepInstructions;
+
+        // Add click functionality to expand/collapse details
+        li.addEventListener('click', () => {
+            li.classList.toggle('expanded');
+        });
 
         ul.appendChild(li);
     });
-    
+
     stepsContainer.appendChild(ul);
 }
+
+// Helper function to get appropriate icons for each mode of transport
+function getStepIcon(mode) {
+    switch (mode) {
+        case 'WALKING':
+            return '🚶';  // Walking icon
+        case 'DRIVING':
+            return '🚗';  // Car icon
+        case 'TRANSIT':
+            return '🚌';  // Bus icon
+        case 'BICYCLING':
+            return '🚲';  // Bicycle icon
+        default:
+            return 'ℹ️';  // Default info icon
+    }
+}
+
 
 
 function calculateCarbonFootprint(steps) {
@@ -176,6 +215,20 @@ function calculateCarbonFootprint(steps) {
 
     // Return the total carbon footprint in kilograms (by dividing by 1000)
     return totalCarbonFootprint / 1000;
+}
+
+// Function to calculate carbon footprint for all steps as driving
+function calculateCarbonFootprintPrivate(steps) {
+    const carEmissionFactor = 150; // Emission factor for driving a car in g CO2/km
+
+    let totalPrivateCarFootprint = 0;
+
+    steps.forEach((step) => {
+        const distanceInKm = step.distance.value / 1000; 
+        totalPrivateCarFootprint += distanceInKm * carEmissionFactor; // Calculate assuming all steps as driving
+    });
+
+    return totalPrivateCarFootprint / 1000; // Return in kg
 }
 
 window.initMap = initMap;

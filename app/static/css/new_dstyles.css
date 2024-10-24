@@ -1,0 +1,170 @@
+* {
+    margin: 0;
+    padding: 0;
+    font-family: sans-serif;
+}
+
+html {
+    scroll-behavior: smooth;
+    background-color: #121212;
+}
+
+
+.banner {
+    width: 100%;
+    height: 100vh;
+    background-color: #121212;
+    color: #ffffff;
+    background-size: cover;
+    background-position: center;
+}
+
+.navbr {
+    width: 100%;
+    margin: auto;
+    padding: 20px 0;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: black;
+}
+
+.navbr ul li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 20px;
+    position: relative;
+}
+
+.navbr ul li.right {
+    margin-left: 980px; /* Push the right links to the end */
+}
+
+.navbr ul li a {
+    text-decoration: none;
+    color: aliceblue;
+    text-transform: uppercase;
+  
+}
+
+.navbr ul li::after {
+    content: '';
+    height: 3px;
+    width: 0%;
+    background: #009688;
+    position: absolute;
+    left: 0;
+    bottom: -7px;
+    transition: 0.5s;
+}
+
+
+
+
+.navbr ul li:hover::after {
+    width: 100%;
+    
+  
+}
+.navbr ul li a.active{
+   text-decoration: underline;
+   text-decoration-color: #009688;
+   text-decoration-thickness: 3px;
+   text-underline-offset: 10px;
+   
+   
+    
+    
+}
+
+.user_info {
+    text-decoration: none;
+    color: #009688;
+    font-family: sans-serif;
+}
+
+
+#map {
+    width: 80%;
+    height: 600px;
+    margin: 20px auto;
+}
+
+#steps {
+    margin-top: 20px;
+}
+
+/* Styles for the list of steps */
+.journey-steps {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+}
+
+/* Style for each step as a card */
+.journey-step {
+    padding: 15px;
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    cursor: pointer;
+    transition: background-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.journey-step:hover {
+    background-color: #f1f1f1;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.15);
+}
+
+/* Layout for step header */
+.step-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-weight: bold;
+    font-size: 16px;
+    color: #000;
+}
+
+/* Icon styles */
+.step-icon {
+    font-size: 24px;
+    margin-right: 10px;
+}
+
+/* Instructions text */
+.step-instructions {
+    flex: 1;
+    margin-right: 10px;
+}
+
+/* Duration styles */
+.step-duration {
+    font-size: 14px;
+    color: #777;
+}
+
+/* Initially hide step details */
+.step-details {
+    display: none;
+    margin-top: 10px;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Show step details when expanded */
+.journey-step.expanded .step-details {
+    display: block;
+}
+
+/* Transit details styles */
+.transit-details {
+    color: #009688;
+    font-style: italic;
+}
+
+.transit-stop {
+    font-weight: bold;
+}

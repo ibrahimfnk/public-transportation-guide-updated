@@ -10,52 +10,56 @@
     <script src="{{ url_for('static', filename='js/statistics.js') }}"></script>
 </head>
 <body>
-    <header>
-        <nav>
-            <ul>
-                <li><a href="{{url_for('dashboard')}}" class="active" id="home">Home</a></li>
-                <li><a href="#" id="about">About</a></li>
-                <li><a href="{{ url_for('about') }}" id="contact">Contact</a></li>
-                <li><a href="{{url_for('statistics')}}" id="statistics">Statistics</a></li>
-                <li class="right">
-                    <a href="{{url_for('logout')}}" id="sign-in">Logout</a>
-                </li>
-            </ul>
-        </nav>
-    </header>
-    <main>
-        <!-- home page content here -->
-     
-      <div class="transportation-guide">
-            <h2>Statistics</h2>
-            <div class="card mb-4">
-                <div class="card-header">
-                    Trip Summary
-                </div>
-                <div class="card-body">
-                    <canvas id="tripSummaryChart"></canvas>
-                </div>
-            </div>
+    <div class="banner">
+        <header class="navbr">
+            <nav>
+                <ul>
+                    <li><a href="{{url_for('dashboard')}}" id="home">Home</a></li>
+                    <li><a href="{{url_for('statistics')}}" id="statistics">Statistics</a></li>
 
-            <div class="card mb-4">
-                <div class="card-header">
-                    Carbon Footprint
-                </div>
-                <div class="card-body">
-                    <canvas id="carbonFootprintChart"></canvas>
-                </div>
-            </div>
+                    <li class="right">
+                        <li ><a href="{{url_for('logout')}}" id="sign-up">Log Out</a></li>
+                    </li>
+                </ul>
+            </nav>
+        </header>   
 
-            <div class="card mb-4">
-                <div class="card-header">
-                    Most Frequent Destinations
+        <div class="content">
+                <h2 class="heading">Statistics</h2>
+
+                <div class="metrics">
+                    <div class="metric-box" id="totalTrips">
+                        <h2>Total Trips</h2>
+                        <p>0</p> <!-- This will be updated dynamically -->
+                    </div>
+                    <div class="metric-box" id="totalDistance">
+                        <h2>Total Distance (km)</h2>
+                        <p>0</p> <!-- This will be updated dynamically -->
+                    </div>
+                    <div class="metric-box" id="averageDistance">
+                        <h2>Average Distance (km)</h2>
+                        <p>0</p> <!-- This will be updated dynamically -->
+                    </div>
+
+                    <div class="metric-box" id="carbonFootprintComparison">
+                        <h2>Carbon Footprint Comparison</h2>
+                        <p>0</p>
+                        <canvas id="carbonFootprintChart" width="400" height="200"></canvas>
+                    </div>
+
+                    <div class="metric-box top-locations" id="topLocations">
+                        <h2>Top 5 Most Frequently Visited Locations</h2>
+                        <ul id="locationList">
+                        </ul>
+                    </div>
                 </div>
-                <div class="card-body">
-                    <ul id="topDestinationsList" class="list-group"></ul>
-                </div>
-            </div>
+
+                
+                
         </div>
-    </main>
+    </div>
+
     <script src="{{url_for('static', filename='/js/script.js')}}"></script>
+    <script src="{{url_for('static', filename='js/active_header.js')}}"></script>
 </body>
 </html>

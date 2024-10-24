@@ -52,7 +52,8 @@ class Trip(db.Model):
     end_location_id = db.Column(db.Integer, db.ForeignKey('location.id'), nullable=False)
     transport_mode = db.Column(db.String(200), nullable=False)
     distance = db.Column(db.Float, nullable=False)
-    carbon_footprint = db.Column(db.Float, nullable=False)
+    carbon_footprint_public = db.Column(db.Float, nullable=False)
+    carbon_footprint_private = db.Column(db.Float, nullable=False)
     timestamp = db.Column(db.DateTime, default=datetime.utcnow)
 
 
@@ -159,7 +160,7 @@ def register():
         existing_user = User.query.filter_by(email=email).first()
         if existing_user:
             flash("Email already exists. Please use a different email.", "danger")
-            return redirect(url_for('register'))
+            return render_template('register.html', form=form)
 
         hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
 
@@ -197,7 +198,7 @@ def dashboard():
     id = session['id']
     user = User.query.filter_by(id = id).first()
     if user:
-        return render_template('dashboard.html', user = user)
+        return render_template('new_dashboard.html', user = user)
     
 @app.route("/statistics")
 def statistics():
@@ -267,7 +268,8 @@ def save_trip():
             end_location_id=end_location.id,
             transport_mode=data['transport_mode'],
             distance=data['distance'],
-            carbon_footprint=data['carbon_footprint']
+            carbon_footprint_public=data['carbon_footprint'],
+            carbon_footprint_private=data['carbon_footprint_private']
         )
         db.session.add(trip)
         db.session.commit()
@@ -308,12 +310,12 @@ def carbon_footprint():
     if not user_id:
         return jsonify({"error": "User not logged in"}), 403
 
-    total_carbon = db.session.query(func.sum(Trip.carbon_footprint)).filter_by(user_id=user_id).scalar() or 0
-    average_carbon = db.session.query(func.avg(Trip.carbon_footprint)).filter_by(user_id=user_id).scalar() or 0
+    total_carbon_public = db.session.query(func.sum(Trip.carbon_footprint_public)).filter_by(user_id=user_id).scalar() or 0
+    total_carbon_private = db.session.query(func.sum(Trip.carbon_footprint_private)).filter_by(user_id=user_id).scalar() or 0
 
     return jsonify({
-        "total_carbon_footprint": total_carbon,
-        "average_carbon_footprint": average_carbon
+        "carbon_footprint_public": total_carbon_public,
+        "carbon_footprint_private": total_carbon_private
     })
 
 @app.route('/api/frequent_destinations', methods=['GET'])

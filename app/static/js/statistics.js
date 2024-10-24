@@ -8,9 +8,31 @@ function fetchTripSummary() {
     fetch('/api/trip_summary')
         .then(response => response.json())
         .then(data => {
-            renderTripSummaryChart(data);
+            displayTotalTrips(data.total_trips);
+            displayTotalDistance(data.total_distance);
+            displayAverageDistance(data.average_distance);
         })
         .catch(error => console.error('Error fetching trip summary:', error));
+}
+
+function displayTotalTrips(totalTrips) {
+    const totalTripsBox = document.getElementById('totalTrips').querySelector('p');
+    totalTripsBox.textContent = totalTrips;
+}
+
+function displayTotalDistance(totalDistance) {
+    const totalDistanceBox = document.getElementById('totalDistance').querySelector('p');
+    totalDistanceBox.textContent = totalDistance + " km";
+}
+
+function displayAverageDistance(averageDistance) {
+    const averageDistanceBox = document.getElementById('averageDistance').querySelector('p');
+    averageDistanceBox.textContent = averageDistance + " km";
+}
+
+function displayCarbonFootprint(carbon_public, carbon_private) {
+    const carbonFootprintBox = document.getElementById('carbonFootprintComparison').querySelector('p');
+    carbonFootprintBox.textContent = Math.round(carbon_public * 100)/100 + " kg CO2" + " " + Math.round(carbon_private * 100)/100 + " kg CO2";
 }
 
 function renderTripSummaryChart(data) {
@@ -47,6 +69,8 @@ function fetchCarbonFootprint() {
         .then(response => response.json())
         .then(data => {
             renderCarbonFootprintChart(data);
+            console.log(data.carbon_footprint_private);
+            displayCarbonFootprint(data.carbon_footprint_public, data.carbon_footprint_private)
         })
         .catch(error => console.error('Error fetching carbon footprint:', error));
 }
@@ -54,25 +78,34 @@ function fetchCarbonFootprint() {
 function renderCarbonFootprintChart(data) {
     const ctx = document.getElementById('carbonFootprintChart').getContext('2d');
     const carbonChart = new Chart(ctx, {
-        type: 'doughnut',
+        type: 'bar',
         data: {
-            labels: ['Total Carbon Footprint', 'Remaining/Comparison'],
+            labels: ['Public Transport', 'Private Transport'],
             datasets: [{
                 label: 'Carbon Footprint',
-                data: [data.total_carbon_footprint, 100 - data.total_carbon_footprint], // Adjust as needed
+                data: [data.carbon_footprint_public, data.carbon_footprint_private], // Adjust as needed
                 backgroundColor: [
-                    'rgba(255, 99, 132, 0.6)',
-                    'rgba(201, 203, 207, 0.6)'
+                    'rgba(75, 192, 192, 0.6)',
+                    'rgba(255, 99, 132, 0.6)'
                 ],
                 borderColor: [
-                    'rgba(255, 99, 132, 1)',
-                    'rgba(201, 203, 207, 1)'
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(255, 99, 132, 1)'
                 ],
                 borderWidth: 1
             }]
         },
         options: {
-            responsive: true
+            responsive: true,
+            scales: {
+                y: {
+                    beginAtZero: true,
+                    title: {
+                        display: true,
+                        text: 'kg CO2'
+                    }
+                }
+            }
         }
     });
 }
@@ -87,7 +120,7 @@ function fetchFrequentDestinations() {
 }
 
 function renderFrequentDestinations(data) {
-    const list = document.getElementById('topDestinationsList');
+    const list = document.getElementById('locationList');
     data.top_destinations.forEach(dest => {
         const listItem = document.createElement('li');
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';

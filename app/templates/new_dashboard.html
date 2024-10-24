@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard</title>
+    <link rel="stylesheet" href="{{url_for('static', filename='/css/new_dstyles.css')}}">
+    <link rel="icon" type="image/x-icon" href="{{url_for('static', filename = '/img/favicon-32x32.png')}}">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+</head>
+<body>
+    <div class="banner">
+        <header class="navbr">
+            <nav>
+                <ul>
+                    <li><a href="{{url_for('index')}}" id="home">Home</a></li>
+                    <li><a href="{{url_for('statistics')}}" id="statistics">Statistics</a></li>
+
+                    <li class="right">
+                        <li ><a href="{{url_for('logout')}}" id="sign-up">Log Out</a></li>
+                        {% if user %}
+                            <a href="#" class="user_info">Hello {{ user.username }}</a>
+                        {% endif %}
+                    </li>
+                </ul>
+            </nav>
+        </header>   
+
+        <div class="content">
+            <h1>Maps Integration</h1>
+            <div class="container-fluid">
+                <div class="form-group">
+                    <label for="start" class="col-xs-2 control-label">From</label>
+                    <div class="col-xs-4">
+                        <input type="text" name="start" id="start" class="form-control" placeholder="Origin">
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="end" class="col-xs-2 control-label">To</label>
+                    <div class="col-xs-4">
+                        <input type="text" name="end" id="end" class="form-control" placeholder="Destination">
+                    </div>
+                </div>
+                
+                <div class="form-group row">
+                    <div class="col-xs-4">
+                        <button id="submitBtn" class="btn btn-primary">Get Directions</button>
+                    </div>
+                </div>
+            </div>
+        
+            <div class="container-fluid">
+                <div id="map"></div>
+            </div>
+    
+            <div id="steps">
+                <h2>Travel Steps:</h2>
+            </div>
+
+    
+            <button id="saveTripBtn">Complete Trip</button>
+
+        </div>
+
+    </div>
+    
+    <script src="{{url_for('static', filename='/js/dashboard.js')}}"></script>
+    <script src="{{url_for('static', filename='/js/new_map.js')}}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyAc4Ogfo1MaSoZBPF4a6yzPcDKQ6TpDfdU&loading=async&libraries=places&callback=initMap" async defer></script>
+</body>
+</html>
